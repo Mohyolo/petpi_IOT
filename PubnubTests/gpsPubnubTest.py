@@ -17,16 +17,25 @@ def GPS_Info():
     nmea_longitude = []
     nmea_time = NMEA_buff[0]                    #extract time from GPGGA string
     nmea_latitude = NMEA_buff[1]                #extract latitude from GPGGA string
+    latitude_direction = NMEA_buff[2]           #extract latitude direction N/S from GPGGA string
     nmea_longitude = NMEA_buff[3]               #extract longitude from GPGGA string
+    longtitude_direction = NMEA_buff[4]         #extract longitude direction E/W from GPGGA string
     
     print("NMEA Time: ", nmea_time,'\n')
-    print ("NMEA Latitude:", nmea_latitude,"NMEA Longitude:", nmea_longitude,'\n')
+    print ("NMEA Latitude:", nmea_latitude," ",latitude_direction," NMEA Longitude:", nmea_longitude," ",latitude_direction,'\n')
     
     lat = float(nmea_latitude)                  #convert string into float for calculation
     longi = float(nmea_longitude)               #convertr string into float for calculation
     
     lat_in_degrees = convert_to_degrees(lat)    #get latitude in degree decimal format
     long_in_degrees = convert_to_degrees(longi) #get longitude in degree decimal format
+
+    if latitude_direction == "S":
+        lat_in_degrees = lat_in_degrees * -1
+
+    if longtitude_direction == "W":
+        long_in_degrees = long_in_degrees * -1
+
     
 #convert raw NMEA string into degree decimal format   
 def convert_to_degrees(raw_value):
