@@ -54,9 +54,6 @@ pubnub.publish().channel(channel).message(message).sync()
 
 try:
     while True:
-        # Simulate getting accelerometer data
-        # Replace this with actual accelerometer data retrieval
-        x, y, z = 0.123456, 1.234567, 2.345678  # Example data
         data = "%f %f %f" % accelerometer.acceleration         # Format data
 
         # Publish the data
