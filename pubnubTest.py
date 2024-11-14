@@ -70,7 +70,8 @@ pnconf = PNConfiguration()                                              # create
  
 pnconf.publish_key = 'pub-c-6478efda-63f9-4d8c-84ba-df3504a89d76'       # set pubnub publish_key
 pnconf.subscribe_key = 'sub-c-f8959022-48fd-4250-99bc-3a437eb6fd64'     # set pubnub subscibe_key
- 
+pnconf.uuid = "Petpi"                            
+
 pubnub = PubNub(pnconf)                     # create pubnub_object using pubnub_configuration_object
 
 channel='GPS-Petpi'                         # provide pubnub channel_name
