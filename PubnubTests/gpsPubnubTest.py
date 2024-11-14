@@ -88,4 +88,9 @@ try:
         time.sleep(1)
                         
 except KeyboardInterrupt:
+    print("Closing connection...")
+
+    # Unsubscribe from the channel and stop PubNub instance
+    pubnub.unsubscribe().channels(channel).execute()
+    pubnub.stop()
     sys.exit(0)
