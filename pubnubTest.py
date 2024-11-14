@@ -64,13 +64,14 @@ from pubnub.pubnub import PubNub, SubscribeListener, SubscribeCallback, PNStatus
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.exceptions import PubNubException
 import pubnub
+import time
 
 
 pnconf = PNConfiguration()                                              # create pubnub_configuration_object
  
 pnconf.publish_key = 'pub-c-6478efda-63f9-4d8c-84ba-df3504a89d76'       # set pubnub publish_key
 pnconf.subscribe_key = 'sub-c-f8959022-48fd-4250-99bc-3a437eb6fd64'     # set pubnub subscibe_key
-pnconf.uuid = "Petpi"                            
+pnconf.uuid = "Petpi2"                            
 
 pubnub = PubNub(pnconf)                     # create pubnub_object using pubnub_configuration_object
 
@@ -102,6 +103,15 @@ print('connected')                                  # print confirmation msg
 
 pubnub.publish().channel(channel).message(data).sync()      # publish the data to the mentioned channel
 
-while True:                                                 # Infinite loop
-    result = my_listener.wait_for_message_on(channel)       # Read the new msg on the channel
-    print(result.message)                                   # print the new msg
+try:
+    while True:
+        result = my_listener.wait_for_message_on(channel)  # Read the new msg on the channel
+        print(result.message)                              # Print the new msg
+        time.sleep(1)  # Just a delay to avoid spamming console
+except KeyboardInterrupt:
+    print("Closing connection...")
+
+    # Unsubscribe from the channel and stop PubNub instance
+    pubnub.unsubscribe().channels(channel).execute()
+    pubnub.stop()
+    print("Connection closed.")                                 # print the new msg
