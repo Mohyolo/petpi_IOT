@@ -23,14 +23,16 @@ def GPS_Info():
     lat = float(nmea_latitude)                  #convert string into float for calculation
     longi = float(nmea_longitude)               #convertr string into float for calculation
     
-    lat_in_degrees = convert_to_degrees(lat)    #get latitude in degree decimal format
-    long_in_degrees = convert_to_degrees(longi) #get longitude in degree decimal format
-    
     if latitude_direction == "S":
         lat_in_degrees = lat_in_degrees * -1
 
     if longtitude_direction == "W":
         long_in_degrees = long_in_degrees * -1
+    
+    lat_in_degrees = convert_to_degrees(lat)    #get latitude in degree decimal format
+    long_in_degrees = convert_to_degrees(longi) #get longitude in degree decimal format
+    
+    
 
 #convert raw NMEA string into degree decimal format   
 def convert_to_degrees(raw_value):
