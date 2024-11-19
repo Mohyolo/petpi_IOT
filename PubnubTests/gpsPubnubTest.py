@@ -24,6 +24,12 @@ def GPS_Info():
     print("NMEA Time: ", nmea_time,'\n')
     print ("NMEA Latitude:", nmea_latitude," ",latitude_direction," NMEA Longitude:", nmea_longitude," ",latitude_direction,'\n')
     
+    if nmea_latitude is None:
+        nmea_latitude = 0.0
+    
+    if nmea_longitude is None:
+        nmea_longitude = 0.0
+
     lat = float(nmea_latitude)                  #convert string into float for calculation
     longi = float(nmea_longitude)               #convertr string into float for calculation
     
