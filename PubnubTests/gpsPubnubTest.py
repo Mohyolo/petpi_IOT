@@ -32,15 +32,15 @@ def GPS_Info():
 
     lat = float(nmea_latitude)                  #convert string into float for calculation
     longi = float(nmea_longitude)               #convertr string into float for calculation
+
+    if latitude_direction == 'S':
+        lat = lat * -1
+
+    if longtitude_direction == 'W':
+        longi = longi * -1
     
     lat_in_degrees = convert_to_degrees(lat)    #get latitude in degree decimal format
     long_in_degrees = convert_to_degrees(longi) #get longitude in degree decimal format
-
-    if latitude_direction == "S":
-        lat_in_degrees = lat_in_degrees * -1
-
-    if longtitude_direction == "W":
-        long_in_degrees = long_in_degrees * -1
 
     
 #convert raw NMEA string into degree decimal format   
@@ -49,7 +49,7 @@ def convert_to_degrees(raw_value):
     degrees = int(decimal_value)
     mm_mmmm = (decimal_value - int(decimal_value))/0.6
     position = degrees + mm_mmmm
-    position = "%.4f" %(position)
+    position = "%.5f" %(position)
     return position
     
 pnconf = PNConfiguration()                                              # create pubnub_configuration_object
@@ -61,6 +61,8 @@ pnconf.uuid = "Petpi"
 pubnub = PubNub(pnconf)                     # create pubnub_object using pubnub_configuration_object
 
 channel='GPS-Petpi' 
+
+petID = "6728de4cb69cfe313c2fcb63"
 
 message = {                                    # data to be published
     'username': 'Akshay: ps_01',
@@ -92,7 +94,7 @@ try:
             print("------------------------------------------------------------\n")
 
             
-            data = f"lat in degrees: {lat_in_degrees}  long in degree: {long_in_degrees}"
+            data = f"PetId = {petID} , lat in degrees: {lat_in_degrees}  long in degree: {long_in_degrees}"
 
             try:
                 envelope = pubnub.publish().channel(channel).message({"data": data}).sync()

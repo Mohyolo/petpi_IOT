@@ -24,10 +24,10 @@ def GPS_Info():
     longi = float(nmea_longitude)               #convertr string into float for calculation
     
     if latitude_direction == "S":
-        lat_in_degrees = lat_in_degrees * -1
+       lat  = lat * -1
 
     if longtitude_direction == "W":
-        long_in_degrees = long_in_degrees * -1
+        longi = longi * -1
     
     lat_in_degrees = convert_to_degrees(lat)    #get latitude in degree decimal format
     long_in_degrees = convert_to_degrees(longi) #get longitude in degree decimal format
@@ -40,7 +40,7 @@ def convert_to_degrees(raw_value):
     degrees = int(decimal_value)
     mm_mmmm = (decimal_value - int(decimal_value))/0.6
     position = degrees + mm_mmmm
-    position = "%.4f" %(position)
+    position = "%.5f" %(position)
     return position
     
 
@@ -62,7 +62,7 @@ try:
             GPS_Info()                                          #get time, latitude, longitude
  
             print("lat in degrees:", lat_in_degrees," long in degree: ", long_in_degrees, '\n')
-            map_link = 'http://maps.google.com/?q=' + lat_in_degrees + ',' + long_in_degrees    #create link to plot location on Google map
+            #map_link = 'http://maps.google.com/?q=' + lat_in_degrees + ',' + long_in_degrees    #create link to plot location on Google map
             print("<<<<<<<<press ctrl+c to plot location on google maps>>>>>>\n")               #press ctrl+c to plot on map and exit 
             print("------------------------------------------------------------\n")
                         
