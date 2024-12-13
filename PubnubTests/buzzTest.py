@@ -33,8 +33,9 @@ pubnub = PubNub(pnconf)                     # create pubnub_object using pubnub_
 my_listener = SubscribeListener()                   # create listner_object to read the msg from the Broker/Server
 pubnub.add_listener(my_listener)
 
-channel='GPS-Petpi' 
+channel='GPS-Petpi1' 
 
+pubnub.subscribe().channels(channel).execute()
 
 try:
     while True:
@@ -42,9 +43,13 @@ try:
         print(result.message)                              # Print the new msg
         
         if result.message == "ON":
-            GPIO.output(buz_pin,True)
-        elif result.message == "OFF":
-            GPIO.output(buz_pin,False)
+            for i in range (3000):
+                GPIO.output(buz_pin,True)
+                time.sleep(0.001)
+                GPIO.output(buz_pin,False)
+                time.sleep(0.001)
+        #elif result.message == "OFF":
+         #   GPIO.output(buz_pin,False)
 
         #time.sleep(1)  # Just a delay to avoid spamming console
 except KeyboardInterrupt:
@@ -54,9 +59,5 @@ except KeyboardInterrupt:
     pubnub.unsubscribe().channels(channel).execute()
     pubnub.stop()
     print("Connection closed.")
-while True:
-    GPIO.output(buz_pin,True)
-    GPIO.output(buz_pin,False)
-
 GPIO.cleanup()
 
