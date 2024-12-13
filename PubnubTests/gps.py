@@ -120,14 +120,10 @@ def gps_tracker():
 
                 if isinstance(NMEA_buff, list) and len(NMEA_buff) >= 5:  # Ensure buffer is valid
                     GPS_Info()  # Get time, latitude, longitude
-                    print(f"lat in degrees: {lat_in_degrees}, long in degrees: {long_in_degrees}")
-                    map_link = f'http://maps.google.com/?q={lat_in_degrees},{long_in_degrees}'  # Google Maps link
-                    print("Google Maps link:", map_link)
-
                     data = f"PetId = {petID}, lat: {lat_in_degrees}, long: {long_in_degrees}"
 
                     # Turn on the LED for valid data
-                    GPIO.output(led_pin, False)
+                    GPIO.output(led_pin, True)
 
                     try:
                         envelope = pubnub.publish().channel(channel).message({"data": data}).sync()
@@ -138,17 +134,17 @@ def gps_tracker():
                     print("Invalid NMEA buffer:", NMEA_buff)
 
                     # Turn off the LED for invalid data
-                    GPIO.output(led_pin, True)
+                    GPIO.output(led_pin, False)
 
             else:
                 # Turn off the LED if no valid GPGGA data is found
-                GPIO.output(led_pin, True)
+                GPIO.output(led_pin, False)
 
         except Exception as e:
             print("Error in gps_tracker:", e)
 
             # Turn off the LED in case of an error
-            GPIO.output(led_pin, True)
+            GPIO.output(led_pin, False)
 
         time.sleep(0.1)
 
