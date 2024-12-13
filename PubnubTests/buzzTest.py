@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 buz_pin = 23
+GPIO.cleanup()
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
