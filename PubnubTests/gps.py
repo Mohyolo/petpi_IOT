@@ -95,6 +95,11 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(buz_pin,GPIO.OUT)
 
+led_pin = 22 
+
+# Set up the LED GPIO
+GPIO.setup(led_pin, GPIO.OUT)
+
 gpgga_info = "$GPGGA,"
 ser = serial.Serial ("/dev/ttyAMA0")              #Open port with baud rate
 GPGGA_buffer = 0
@@ -104,26 +109,46 @@ long_in_degrees = 0
 
 
 def gps_tracker():
+    global NMEA_buff  # Ensure you're using the global variable
     while True:
-        received_data = (str)(ser.readline())                   #read NMEA string received
-        GPGGA_data_available = received_data.find(gpgga_info)   #check for NMEA GPGGA string                 
-        if (GPGGA_data_available>0):
-            GPGGA_buffer = received_data.split("$GPGGA,",1)[1]  #store data coming after "$GPGGA," string 
-            NMEA_buff = (GPGGA_buffer.split(','))               #store comma separated data in buffer
-            GPS_Info()                                          #get time, latitude, longitude
-            print("lat in degrees:", lat_in_degrees," long in degree: ", long_in_degrees, '\n')
-            map_link = 'http://maps.google.com/?q=' + lat_in_degrees + ',' + long_in_degrees    #create link to plot location on Google map
-            print("<<<<<<<<press ctrl+c to plot location on google maps>>>>>>\n")               #press ctrl+c to plot on map and exit 
-            print("------------------------------------------------------------\n")
+        try:
+            received_data = (str)(ser.readline())  # Read NMEA string received
+            GPGGA_data_available = received_data.find(gpgga_info)  # Check for NMEA GPGGA string
+            if GPGGA_data_available > 0:
+                GPGGA_buffer = received_data.split("$GPGGA,", 1)[1]  # Store data after "$GPGGA,"
+                NMEA_buff = GPGGA_buffer.split(',')  # Store comma-separated data in buffer
 
-            
-            data = f"PetId = {petID}, lat: {lat_in_degrees}, long: {long_in_degrees}"
+                if isinstance(NMEA_buff, list) and len(NMEA_buff) >= 5:  # Ensure buffer is valid
+                    GPS_Info()  # Get time, latitude, longitude
+                    print(f"lat in degrees: {lat_in_degrees}, long in degrees: {long_in_degrees}")
+                    map_link = f'http://maps.google.com/?q={lat_in_degrees},{long_in_degrees}'  # Google Maps link
+                    print("Google Maps link:", map_link)
 
-            try:
-                envelope = pubnub.publish().channel(channel).message({"data": data}).sync()
-                print("Published:", data)
-            except PubNubException as e:
-                print("Publishing error:", e)
+                    data = f"PetId = {petID}, lat: {lat_in_degrees}, long: {long_in_degrees}"
+
+                    # Turn on the LED for valid data
+                    GPIO.output(led_pin, False)
+
+                    try:
+                        envelope = pubnub.publish().channel(channel).message({"data": data}).sync()
+                        print("Published:", data)
+                    except PubNubException as e:
+                        print("Publishing error:", e)
+                else:
+                    print("Invalid NMEA buffer:", NMEA_buff)
+
+                    # Turn off the LED for invalid data
+                    GPIO.output(led_pin, True)
+
+            else:
+                # Turn off the LED if no valid GPGGA data is found
+                GPIO.output(led_pin, True)
+
+        except Exception as e:
+            print("Error in gps_tracker:", e)
+
+            # Turn off the LED in case of an error
+            GPIO.output(led_pin, True)
 
         time.sleep(0.1)
 
