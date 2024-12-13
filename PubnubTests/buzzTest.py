@@ -7,7 +7,7 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(buz_pin,GPIO.OUT)
 
-for x in range(5):
+for x in range(3):
     GPIO.output(buz_pin,True)
-    time.sleep(0.3)
+    time.sleep(2)
     GPIO.output(buz_pin,False)
