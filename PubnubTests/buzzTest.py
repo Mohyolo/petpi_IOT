@@ -9,3 +9,4 @@ GPIO.setup(buz_pin,GPIO.OUT)
 
 while True:
     GPIO.output(buz_pin,True)
+    GPIO.output(buz_pin,False)
