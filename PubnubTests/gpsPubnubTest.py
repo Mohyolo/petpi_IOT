@@ -24,11 +24,11 @@ def GPS_Info():
     print("NMEA Time: ", nmea_time,'\n')
     print ("NMEA Latitude:", nmea_latitude," ",latitude_direction," NMEA Longitude:", nmea_longitude," ",latitude_direction,'\n')
     
-    if nmea_latitude is None:
-        nmea_latitude = 0.0
+    if nmea_latitude == "":
+        nmea_latitude = "0.0"
     
-    if nmea_longitude is None:
-        nmea_longitude = 0.0
+    if nmea_longitude == "":
+        nmea_longitude = "0.0"
 
     lat = float(nmea_latitude)                  #convert string into float for calculation
     longi = float(nmea_longitude)               #convertr string into float for calculation
@@ -49,7 +49,7 @@ def convert_to_degrees(raw_value):
     degrees = int(decimal_value)
     mm_mmmm = (decimal_value - int(decimal_value))/0.6
     position = degrees + mm_mmmm
-    position = "%.5f" %(position)
+    position = "%.7f" %(position)
     return position
     
 pnconf = PNConfiguration()                                              # create pubnub_configuration_object
@@ -71,7 +71,7 @@ message = {                                    # data to be published
 
 pubnub.subscribe().channels(channel).execute()
 
-pubnub.publish().channel(channel).message(message).sync()
+#pubnub.publish().channel(channel).message(message).sync()
 
 gpgga_info = "$GPGGA,"
 ser = serial.Serial ("/dev/ttyAMA0")              #Open port with baud rate
@@ -94,7 +94,7 @@ try:
             print("------------------------------------------------------------\n")
 
             
-            data = f"PetId = {petID} , lat in degrees: {lat_in_degrees}  long in degree: {long_in_degrees}"
+            data = f"PetId = {petID}, lat: {lat_in_degrees}, long: {long_in_degrees}"
 
             try:
                 envelope = pubnub.publish().channel(channel).message({"data": data}).sync()
@@ -102,7 +102,7 @@ try:
             except PubNubException as e:
                 print("Publishing error:", e)
 
-        time.sleep(1)
+        time.sleep(0.1)
                         
 except KeyboardInterrupt:
     print("Closing connection...")
