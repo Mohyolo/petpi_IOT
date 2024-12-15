@@ -2,6 +2,7 @@
 
 import serial               #import serial pacakge
 import time
+import json
 import RPi.GPIO as GPIO
 import threading
 import sys                  #import system package
@@ -153,14 +154,12 @@ def buzzer_handler():
         result = my_listener.wait_for_message_on(channel)  # Read the new message on the channel
         print(result.message)                              # Print the new message
         
-        # Check if the message string is in the format {"message":"ON"}
-        message = result.message  # Remove leading/trailing whitespace
-        
-        if message.startswith('{"message":"') and message.endswith('"}'):
-            # Extract the value of "message"
-            value = message[len('{"message":"'):-len('"}')]
+        try:
+            # Parse the JSON string
+            message_data = json.loads(result.message)
             
-            if value == "ON":
+            # Check if the "message" field contains "ON"
+            if message_data.get("message") == "ON":
                 for i in range(3000):
                     GPIO.output(buz_pin, True)
                     time.sleep(0.001)
@@ -168,8 +167,10 @@ def buzzer_handler():
                     time.sleep(0.001)
             else:
                 print("Message received, no action.")
-        else:
-            print("Invalid message format:", message)
+        except json.JSONDecodeError:
+            print("Invalid JSON message:", result.message)
+        except Exception as e:
+            print("Error in buzzer_handler:", e)
 
 
 if __name__ == "__main__":
