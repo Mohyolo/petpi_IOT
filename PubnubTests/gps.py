@@ -154,7 +154,7 @@ def buzzer_handler():
         print(result.message)                              # Print the new message
         
         # Check if the message string is in the format {"message":"ON"}
-        message = result.message.strip()  # Remove leading/trailing whitespace
+        message = result.message  # Remove leading/trailing whitespace
         
         if message.startswith('{"message":"') and message.endswith('"}'):
             # Extract the value of "message"
