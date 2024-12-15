@@ -25,8 +25,8 @@ def GPS_Info():
     nmea_longitude = NMEA_buff[3]               #extract longitude from GPGGA string
     longtitude_direction = NMEA_buff[4]         #extract longitude direction E/W from GPGGA string
     
-    print("NMEA Time: ", nmea_time,'\n')
-    print ("NMEA Latitude:", nmea_latitude," ",latitude_direction," NMEA Longitude:", nmea_longitude," ",latitude_direction,'\n')
+    #print("NMEA Time: ", nmea_time,'\n')
+    #print ("NMEA Latitude:", nmea_latitude," ",latitude_direction," NMEA Longitude:", nmea_longitude," ",latitude_direction,'\n')
     
     if nmea_latitude == "":
         nmea_latitude = "0.0"
@@ -81,14 +81,7 @@ channel='GPS-Petpi'
 
 petID = "6728de4cb69cfe313c2fcb63"
 
-message = {                                    # data to be published
-    'username': 'Akshay: ps_01',
-    'message' : 'This is my 1st msg... '
-}
-
 pubnub.subscribe().channels(channel).execute()
-
-#pubnub.publish().channel(channel).message(message).sync()
 
 buz_pin = 24
 
