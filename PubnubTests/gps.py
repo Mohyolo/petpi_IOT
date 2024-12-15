@@ -186,6 +186,7 @@ if __name__ == "__main__":
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
+        GPIO.output(led_pin, False)
         print("Exiting program.")
         # Unsubscribe from the channel and stop PubNub instance
         pubnub.unsubscribe().channels(channel).execute()
