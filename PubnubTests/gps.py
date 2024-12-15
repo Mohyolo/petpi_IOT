@@ -155,11 +155,8 @@ def buzzer_handler():
         print(result.message)                              # Print the new message
         
         try:
-            # Parse the JSON string
-            message_data = json.loads(result.message)
-            
-            # Check if the "message" field contains "ON"
-            if message_data.get("message") == "ON":
+            # Check if "message" key exists and its value is "ON"
+            if result.message.get("message") == "ON":
                 for i in range(3000):
                     GPIO.output(buz_pin, True)
                     time.sleep(0.001)
@@ -167,8 +164,8 @@ def buzzer_handler():
                     time.sleep(0.001)
             else:
                 print("Message received, no action.")
-        except json.JSONDecodeError:
-            print("Invalid JSON message:", result.message)
+        except AttributeError:
+            print("Invalid message format, no 'message' key:", result.message)
         except Exception as e:
             print("Error in buzzer_handler:", e)
 
