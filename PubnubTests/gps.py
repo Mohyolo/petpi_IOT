@@ -151,7 +151,7 @@ def buzzer_handler():
         result = my_listener.wait_for_message_on(channel)  # Read the new msg on the channel
         print(result.message)                              # Print the new msg
         
-        if result.message == '{"message":"ON"}':
+        if result == '{"message":"ON"}':
             for i in range (3000):
                 GPIO.output(buz_pin,True)
                 time.sleep(0.001)
