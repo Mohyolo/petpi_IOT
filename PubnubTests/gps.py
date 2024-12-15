@@ -150,17 +150,26 @@ def gps_tracker():
 
 def buzzer_handler():
     while True:
-        result = my_listener.wait_for_message_on(channel)  # Read the new msg on the channel
-        print(result.message)                              # Print the new msg
+        result = my_listener.wait_for_message_on(channel)  # Read the new message on the channel
+        print(result.message)                              # Print the new message
         
-        if result == '{"message":"ON"}':
-            for i in range (3000):
-                GPIO.output(buz_pin,True)
-                time.sleep(0.001)
-                GPIO.output(buz_pin,False)
-                time.sleep(0.001)
-        else:
+        # Check if the message string is in the format {"message":"ON"}
+        message = result.message.strip()  # Remove leading/trailing whitespace
+        
+        if message.startswith('{"message":"') and message.endswith('"}'):
+            # Extract the value of "message"
+            value = message[len('{"message":"'):-len('"}')]
+            
+            if value == "ON":
+                for i in range(3000):
+                    GPIO.output(buz_pin, True)
+                    time.sleep(0.001)
+                    GPIO.output(buz_pin, False)
+                    time.sleep(0.001)
+            else:
                 print("Message received, no action.")
+        else:
+            print("Invalid message format:", message)
 
 
 if __name__ == "__main__":
