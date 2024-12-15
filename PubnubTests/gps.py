@@ -110,7 +110,7 @@ long_in_degrees = 0
 
 def gps_tracker():
     global NMEA_buff  # Ensure you're using the global variable
-    GPIO.output(led_pin, True)
+    
     while True:
         try:
             received_data = (str)(ser.readline())  # Read NMEA string received
@@ -122,7 +122,9 @@ def gps_tracker():
                 if isinstance(NMEA_buff, list) and len(NMEA_buff) >= 5:  # Ensure buffer is valid
                     GPS_Info()  # Get time, latitude, longitude
                     data = f"PetId = {petID}, lat: {lat_in_degrees}, long: {long_in_degrees}"
-
+                    
+                    GPIO.output(led_pin, True)
+                    
                     try:
                         envelope = pubnub.publish().channel(channel).message({"data": data}).sync()
                         print("Published:", data)
