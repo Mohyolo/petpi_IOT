@@ -76,7 +76,7 @@ pubnub = PubNub(pnconf)                     # create pubnub_object using pubnub_
 my_listener = SubscribeListener()                   # create listner_object to read the msg from the Broker/Server
 pubnub.add_listener(my_listener)
 
-channel='GPS-Petpi' 
+channel='GPS-Petpi1' 
 
 petID = "6728de4cb69cfe313c2fcb63"
 
